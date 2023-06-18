@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 const User = require('./userdetailschema');
 const fs = require('fs');
 const fileUpload = require('express-fileupload');
+const { body,matchedData,validationResult } = require('express-validator');
 
 app.use(cors());
 dotenv.config();
@@ -30,6 +31,9 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         console.log(err);
     })
 
+const emailverify = body('email').isEmail();
+const mobilenumberverify = body('mobilenumber').isInt().isLength({min:10,max:10});
+const ageverify = body('age').isInt().isLength({min:1,max:3});
 
 app.get('/', async (req, res) => {
 
@@ -42,8 +46,11 @@ app.get('/', async (req, res) => {
     }
 })
 
-app.post('/adduserdetail', async (req, res) => {
+app.post('/adduserdetail',emailverify,mobilenumberverify,ageverify, async (req, res) => {
 
+    const result = validationResult(req); 
+  
+  if (result.isEmpty()) {
     const {
         fullname,
         gender,
@@ -74,14 +81,29 @@ app.post('/adduserdetail', async (req, res) => {
             res.send("data error");
         }
 
+
+
     } catch (err) {
         console.log(err);
     }
+
+}else{
+    const data = matchedData(req);
+    if(!data.email){
+      res.send('check email address');
+    }else if(!data.mobilenumber){
+        res.send('check mobile number length');
+    }else if(!data.age){
+        res.send('check age');
+    }
+}
 })
 
 
-app.post('/edituserdetail', async (req, res) => {
-
+app.post('/edituserdetail',emailverify,mobilenumberverify,ageverify, async (req, res) => {
+    const result = validationResult(req); 
+  
+    if (result.isEmpty()) {
     const {
         fullname,
         gender,
@@ -129,6 +151,16 @@ app.post('/edituserdetail', async (req, res) => {
     } catch (err) {
         console.log(err);
     }
+}else{
+    const data = matchedData(req);
+    if(!data.email){
+      res.send('check email address');
+    }else if(!data.mobilenumber){
+        res.send('check mobile number length');
+    }else if(!data.age){
+        res.send('check age');
+    }
+}
 })
 
 

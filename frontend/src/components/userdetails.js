@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react"
 import axios from 'axios';
-import deleteimage from '../assets/delete.png'
 
 export const Userdetails = () => {
 
@@ -76,9 +75,10 @@ export const Userdetails = () => {
                         setUploadimage('');
                         getuserdetails();
                     } else {
-                        alert('error');
+                        alert(res.data);
                         setLoading(false)
                     }
+
 
                 }).catch((err) => {
                     console.log(err);
@@ -142,39 +142,37 @@ export const Userdetails = () => {
                     <th>Edit</th>
                     <th>Delete</th>
                 </tr>
-                {(!loading) && <>
+{(!loading) && <>
 
 
 
-                    {
-                        userdetails.map((val, i) => {
-                            return <><tr key={val._id} className="tablecontainer">
+                {
+                    userdetails.map((val, i) => {
+                        return <><tr key={val._id} className="tablecontainer">
 
-                                <td> <p>{i + 1}</p></td>
-                                <td>  <p>{val.fullname}</p></td>
-                                <td>   <img src={`${process.env.REACT_APP_URL}/photos?source=${val.profilepic}`} width="50px" height='50px' /></td>
-                                <td>  <p>{val.gender}</p></td>
-                                <td>   <p>{val.age}</p></td>
-                                <td>   <p>{val.address}</p></td>
-                                <td>    <p>{val.email}</p></td>
-                                <td> <p>{val.mobilenumber}</p></td>
-                                <td>   <button id='editbutton' onClick={editclicked} value={val._id} ></button></td>
-                                <td>  <button id="deletebutton" onClick={deleteclicked} value={val._id}></button></td>
+                            <td> <p>{i + 1}</p></td>
+                            <td>  <p>{val.fullname}</p></td>
+                            <td>   <img src={`${process.env.REACT_APP_URL}/photos?source=${val.profilepic}`} width="50px" height='50px' alt="pic" /></td>
+                            <td>  <p>{val.gender}</p></td>
+                            <td>   <p>{val.age}</p></td>
+                            <td>   <p>{val.address}</p></td>
+                            <td>    <p>{val.email}</p></td>
+                            <td> <p>{val.mobilenumber}</p></td>
+                            <td>   <button id='editbutton' onClick={editclicked} value={val._id} ></button></td>
+                            <td>  <button id="deletebutton" onClick={deleteclicked} value={val._id}></button></td>
 
 
-                            </tr>
-                            </>
-                        })
-                    }
+                        </tr>
+                        </>
+                    })
+                }
                 </>
-                }
+            }
+            {(loading) &&
 
+            <h1>Loading...</h1>
 
-                {(loading) &&
-
-                    <h1>Loading...</h1>
-
-                }
+            }
             </table>
         </div>
 
@@ -219,7 +217,7 @@ export const Userdetails = () => {
                     <input type='file' id='choosefile1' accept='image/*' onChange={choosefile} ></input>
 
 
-                    <img src={uploadimage} width="150px" />
+                    <img src={uploadimage} width="150px" alt='pic' />
 
 
                 </div>
@@ -231,7 +229,7 @@ export const Userdetails = () => {
                     <label>Mobile No:</label>
                     <input type="number" className="inputbox" value={mobilenumber} onChange={(e) => setMobilenumber(e.target.value)}></input>
                 </div>
-        
+               
                 {(!loading) &&
                     <button className="btn" onClick={editsubmit}>Submit</button>
                 }
@@ -239,7 +237,6 @@ export const Userdetails = () => {
                 {(loading) &&
                     <button className="btn button-disable" disabled>Loading...</button>
                 }
-                
             </form>
         </div >
 

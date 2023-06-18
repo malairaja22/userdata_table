@@ -31,7 +31,7 @@ export const Userinput = () => {
 
             await axios.post(`${process.env.REACT_APP_URL}/adduserdetail`, formData)
                 .then((res) => {
-                    
+                    console.log(res.data);
                     if(res.data === 'success'){
                         setFullname('');
                         setGender('');
@@ -44,7 +44,8 @@ export const Userinput = () => {
                         alert("Data added successfully");
                         setLoading(false);
                     }else{
-                        alert(res.data)
+                        alert(res.data);
+                        setLoading(false);
                     }
                 }).catch((err) => {
                     console.log(err);
